@@ -18,24 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_model('presupuesto_cliente.php');
-require_model('albaran_cliente.php');
-require_model('factura_cliente.php');
-require_model('pedido_cliente.php');
+require_model('pedido_proveedor.php');
+require_model('factura_proveedor.php');
+require_model('albaran_proveedor.php');
 
 /**
  * Description of megacopiador
  *
- * @author Carlos García Gómez
+ * @author Carlos Garcia Gomez
  */
-class megacopiador extends fs_controller
+class megacopiador_compras extends fs_controller
 {
    public $documento;
    public $tipo;
 
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Megacopiador', 'ventas', FALSE, FALSE);
+      parent::__construct(__CLASS__, 'Megacopiador Compras', 'ventas', FALSE, FALSE);
    }
 
    protected function private_core()
@@ -52,135 +51,9 @@ class megacopiador extends fs_controller
           * una cosa distinta para cada tipo.
           */
          
-         if( isset($_REQUEST['presu']) )
+         if( isset($_REQUEST['pedido']) )
          {
-            $presu = new presupuesto_cliente();
-            $this->documento = $presu->get($_REQUEST['id']);
-            $this->tipo = 'presu';
-
-            if($this->documento)
-            {
-               if( isset($_REQUEST['copiar']) )
-               {
-                  /**
-                   * Si nos llega la variable copiar es que han pulsado el botón
-                   * de copiar, así que copiamos el presupuesto.
-                   */
-                  
-                  $presu = clone $this->documento;
-                  $presu->idpresupuesto = NULL;
-                  $presu->idpedido = NULL;
-                  $presu->fecha = $this->today();
-                  $presu->hora = $this->hour();
-                  $presu->status = 0;
-                  if( $presu->save() )
-                  {
-                     /// también copiamos las líneas del presupuesto
-                     foreach($this->documento->get_lineas() as $linea)
-                     {
-                        $newl = clone $linea;
-                        $newl->idlinea = NULL;
-                        $newl->idpresupuesto = $presu->idpresupuesto;
-                        $newl->save();
-                     }
-
-                     $this->new_message('<a href="' . $presu->url() . '">Documento</a> de ' . FS_PRESUPUESTO . ' copiado correctamente.');
-                  }
-                  else
-                  {
-                     $this->new_error_msg('Error al copiar el documento.');
-                  }
-               }
-            }
-         }
-         else if( isset($_REQUEST['albaran']) )
-         {
-            $albaran = new albaran_cliente();
-            $this->documento = $albaran->get($_REQUEST['id']);
-            $this->tipo = 'albaran';
-
-            if($this->documento)
-            {
-               if( isset($_REQUEST['copiar']) )
-               {
-                  /**
-                   * Si nos llega la variable copiar es que han pulsado el botón
-                   * de copiar, así que copiamos el albarán.
-                   */
-                  
-                  $albaran = clone $this->documento;
-                  $albaran->idpresupuesto = NULL;
-                  $albaran->idpedido = NULL;
-                  $albaran->idalbaran = NULL;
-                  $albaran->fecha = $this->today();
-                  $albaran->hora = $this->hour();
-                  $albaran->observaciones = $this->observaciones;
-                  if( $albaran->save() )
-                  {
-                     /// también copiamos las líneas del albarán
-                     foreach($this->documento->get_lineas() as $linea)
-                     {
-                        $newl = clone $linea;
-                        $newl->idlinea = NULL;
-                        $newl->idalbaran = $albaran->idalbaran;
-                        $newl->save();
-                     }
-
-                     $this->new_message('<a href="' . $albaran->url() . '">Documento</a> de ' . FS_ALBARAN . ' copiado correctamente.');
-                  }
-                  else
-                  {
-                     $this->new_error_msg('Error al copiar el documento.');
-                  }
-               }
-            }
-         }
-         else if( isset($_REQUEST['factura']) )
-         {
-            $factura = new factura_cliente();
-            $this->documento = $factura->get($_REQUEST['id']);
-            $this->tipo = 'factura';
-
-            if($this->documento)
-            {
-               if( isset($_REQUEST['copiar']) )
-               {
-                  /**
-                   * Si nos llega la variable copiar es que han pulsado el botón
-                   * de copiar, así que copiamos la factura.
-                   */
-                  
-                  $factura = clone $this->documento;
-                  $factura->idpresupuesto = NULL;
-                  $factura->idpedido = NULL;
-                  $factura->idalbaran = NULL;
-                  $factura->idfactura = NULL;
-                  $factura->fecha = $this->today();
-                  $factura->hora = $this->hour();
-                  $factura->observaciones = $this->observaciones;
-                  if( $factura->save() )
-                  {
-                     /// también copiamos las líneas de la factura
-                     foreach($this->documento->get_lineas() as $linea)
-                     {
-                        $newl = clone $linea;
-                        $newl->idlinea = NULL;
-                        $newl->idfactura = $factura->idfactura;
-                        $newl->save();
-                     }
-
-                     $this->new_message('<a href="' . $factura->url() . '">Documento</a> de factura copiado correctamente.');
-                  }
-                  else
-                  {
-                     $this->new_error_msg('Error al copiar el documento.');
-                  }
-               }
-            }
-         }
-         else if( isset($_REQUEST['pedido']) )
-         {
-            $pedido = new pedido_cliente();
+            $pedido = new pedido_proveedor();
             $this->documento = $pedido->get($_REQUEST['id']);
             $this->tipo = 'pedido';
 
@@ -218,6 +91,85 @@ class megacopiador extends fs_controller
                }
             }
          }
+         else if( isset($_REQUEST['factura']) )
+         {
+            $factura = new factura_proveedor();
+            $this->documento = $factura->get($_REQUEST['id']);
+            $this->tipo = 'factura';
+
+            if($this->documento)
+            {
+               if( isset($_REQUEST['copiar']) )
+               {
+                  /**
+                   * Si nos llega la variable copiar es que han pulsado el botón
+                   * de copiar, así que copiamos la factura.
+                   */
+                  
+                  $factura = clone $this->documento;
+                  $factura->idalbaran = NULL;
+                  $factura->idfactura = NULL;
+                  $factura->fecha = $this->today();
+                  $factura->hora = $this->hour();
+                  if( $factura->save() )
+                  {
+                     /// también copiamos las líneas del pedido
+                     foreach($this->documento->get_lineas() as $linea)
+                     {
+                        $newl = clone $linea;
+                        $newl->idlinea = NULL;
+                        $newl->idfactura = $factura->idfactura;
+                        $newl->save();
+                     }
+
+                     $this->new_message('<a href="' . $factura->url() . '">Documento</a> de ' . FS_FACTURA . ' copiado correctamente.');
+                  }
+                  else
+                  {
+                     $this->new_error_msg('Error al copiar el documento.');
+                  }
+               }
+            }
+         }
+         else if( isset($_REQUEST['albaran']) )
+         {
+            $albaran = new albaran_proveedor();
+            $this->documento = $albaran->get($_REQUEST['id']);
+            $this->tipo = 'albaran';
+
+            if($this->documento)
+            {
+               if( isset($_REQUEST['copiar']) )
+               {
+                  /**
+                   * Si nos llega la variable copiar es que han pulsado el botón
+                   * de copiar, así que copiamos el albarán.
+                   */
+                  
+                  $albaran = clone $this->documento;
+                  $albaran->idalbaran = NULL;
+                  $albaran->fecha = $this->today();
+                  $albaran->hora = $this->hour();
+                  if( $albaran->save() )
+                  {
+                     /// también copiamos las líneas del pedido
+                     foreach($this->documento->get_lineas() as $linea)
+                     {
+                        $newl = clone $linea;
+                        $newl->idlinea = NULL;
+                        $newl->idalbaran = $albaran->idalbaran;
+                        $newl->save();
+                     }
+
+                     $this->new_message('<a href="' . $albaran->url() . '">Documento</a> de ' . FS_ALBARAN . ' copiado correctamente.');
+                  }
+                  else
+                  {
+                     $this->new_error_msg('Error al copiar el documento.');
+                  }
+               }
+            }
+         }
       }
    }
 
@@ -233,26 +185,13 @@ class megacopiador extends fs_controller
       }
    }
    
-   /**
-    * Añadimos las extensiones (los botones).
-    */
    private function share_extensions()
    {
-      $fsext = new fs_extension();
-      $fsext->name = 'copiar_presu';
-      $fsext->from = __CLASS__;
-      $fsext->to = 'ventas_presupuesto';
-      $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
-      $fsext->params = '&presu=TRUE';
-      $fsext->save();
-      
-      unset($fsext);
-      
+      /// añadimos el botón copiar al presupuesto
       $fsext = new fs_extension();
       $fsext->name = 'copiar_pedido';
       $fsext->from = __CLASS__;
-      $fsext->to = 'ventas_pedido';
+      $fsext->to = 'compras_pedido';
       $fsext->type = 'button';
       $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
       $fsext->params = '&pedido=TRUE';
@@ -261,23 +200,23 @@ class megacopiador extends fs_controller
       unset($fsext);
       
       $fsext = new fs_extension();
-      $fsext->name = 'copiar_albaran';
+      $fsext->name = 'copiar_factura';
       $fsext->from = __CLASS__;
-      $fsext->to = 'ventas_albaran';
+      $fsext->to = 'compras_factura';
       $fsext->type = 'button';
       $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
-      $fsext->params = '&albaran=TRUE';
+      $fsext->params = '&factura=TRUE';
       $fsext->save();
       
       unset($fsext);
       
       $fsext = new fs_extension();
-      $fsext->name = 'copiar_factura';
+      $fsext->name = 'copiar_albaran';
       $fsext->from = __CLASS__;
-      $fsext->to = 'ventas_factura';
+      $fsext->to = 'compras_albaran';
       $fsext->type = 'button';
       $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
-      $fsext->params = '&factura=TRUE';
+      $fsext->params = '&albaran=TRUE';
       $fsext->save();
    }
 }
