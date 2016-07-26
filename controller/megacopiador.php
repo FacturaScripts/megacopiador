@@ -22,6 +22,7 @@ require_model('presupuesto_cliente.php');
 require_model('albaran_cliente.php');
 require_model('factura_cliente.php');
 require_model('pedido_cliente.php');
+require_model('articulo.php');
 
 /**
  * Description of megacopiador
@@ -32,7 +33,7 @@ class megacopiador extends fs_controller
 {
    public $documento;
    public $tipo;
-
+   
    public function __construct()
    {
       parent::__construct(__CLASS__, 'Megacopiador', 'ventas', FALSE, FALSE);
@@ -219,6 +220,26 @@ class megacopiador extends fs_controller
             }
          }
       }
+      else if (isset($_REQUEST['articulo']))
+      {
+         $articulo = new articulo();
+         $artori = $articulo->get($_REQUEST['ref']);
+
+         if ($artori)
+         {
+            $articulo = clone $artori;
+            $articulo->referencia = $articulo->get_new_referencia();
+
+            if ($articulo->save())
+            {
+               header('Location: ' . $articulo->url());
+            }
+            else
+            {
+               $this->new_error_msg('Error al copiar el articulo.');
+            }
+         }
+      }
    }
 
    public function url()
@@ -278,6 +299,17 @@ class megacopiador extends fs_controller
       $fsext->type = 'button';
       $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
       $fsext->params = '&factura=TRUE';
+      $fsext->save();
+      
+      unset($fsext);
+      
+      $fsext = new fs_extension();
+      $fsext->name = 'copiar_articulo';
+      $fsext->from = __CLASS__;
+      $fsext->to = 'ventas_articulo';
+      $fsext->type = 'button';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->params = '&articulo=TRUE';
       $fsext->save();
    }
 }
