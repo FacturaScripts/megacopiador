@@ -27,6 +27,7 @@ require_model('articulo.php');
 require_model('cliente.php');
 require_model('serie.php');
 require_model('almacen.php');
+require_model('servicio_cliente.php');
 
 /**
  * Description of megacopiador
@@ -374,6 +375,75 @@ class megacopiador extends fs_controller {
                }
             }
          }
+         else if (isset($_REQUEST['servicio']))
+         {
+            $servicio = new servicio_cliente();
+            $this->documento = $servicio->get($_REQUEST['id']);
+            $this->tipo = 'servicio';
+
+            if ($this->documento)
+            {
+               if (isset($_REQUEST['copiar']))
+               {
+                  /**
+                   * Si nos llega la variable copiar es que han pulsado el botón
+                   * de copiar, así que copiamos el servicio.
+                   */
+                  $servicio = clone $this->documento;
+                  $servicio->idservicio = NULL;
+                  $servicio->fecha = $_REQUEST['fecha'];
+                  $servicio->codserie = $this->serie->codserie;
+                  $servicio->codalmacen = $this->almacen->codalmacen;
+                  $servicio->codagente = $this->user->codagente;
+                  $servicio->observaciones = $_REQUEST['observaciones'];
+                  $servicio->idestado = NULL;
+
+                  //cliente:
+                  if ($this->cliente)
+                  {
+                     foreach ($this->cliente->get_direcciones() as $d)
+                     {
+                        if ($d->domfacturacion)
+                        {
+                           $servicio->codcliente = $this->cliente->codcliente;
+                           $servicio->cifnif = $this->cliente->cifnif;
+                           $servicio->nombrecliente = $this->cliente->razonsocial;
+                           $servicio->apartado = $d->apartado;
+                           $servicio->ciudad = $d->ciudad;
+                           $servicio->coddir = $d->id;
+                           $servicio->codpais = $d->codpais;
+                           $servicio->codpostal = $d->codpostal;
+                           $servicio->direccion = $d->direccion;
+                           $servicio->provincia = $d->provincia;
+                           break;
+                        }
+                     }
+
+                     if ($servicio->save())
+                     {
+                        /// también copiamos las líneas del pedido
+                        foreach ($this->documento->get_lineas() as $linea)
+                        {
+                           $newl = clone $linea;
+                           $newl->idlinea = NULL;
+                           $newl->idservicio = $servicio->idservicio;
+                           $newl->save();
+                        }
+
+                        $this->new_message('<a href="' . $servicio->url() . '">Documento</a> de ' . FS_SERVICIO . ' copiado correctamente.');
+                     }
+                     else
+                     {
+                        $this->new_error_msg('Error al copiar el documento.');
+                     }
+                  }
+                  else
+                  {
+                     $this->new_error_msg('No se ha encontrado el cliente');
+                  }
+               }
+            }
+         }
       }
       else if (isset($_REQUEST['articulo']))
       {
@@ -463,6 +533,17 @@ class megacopiador extends fs_controller {
       $fsext->type = 'button';
       $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
       $fsext->params = '&articulo=TRUE';
+      $fsext->save();
+      
+      unset($fsext);
+
+      $fsext = new fs_extension();
+      $fsext->name = 'copiar_servicio';
+      $fsext->from = __CLASS__;
+      $fsext->to = 'ventas_servicio';
+      $fsext->type = 'button';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->params = '&servicio=TRUE';
       $fsext->save();
    }
 
