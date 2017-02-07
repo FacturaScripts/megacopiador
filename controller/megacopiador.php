@@ -391,6 +391,7 @@ class megacopiador extends fs_controller {
                    */
                   $servicio = clone $this->documento;
                   $servicio->idservicio = NULL;
+                  $servicio->idalbaran = NULL;
                   $servicio->fecha = $_REQUEST['fecha'];
                   $servicio->codserie = $this->serie->codserie;
                   $servicio->codalmacen = $this->almacen->codalmacen;
@@ -421,7 +422,7 @@ class megacopiador extends fs_controller {
 
                      if ($servicio->save())
                      {
-                        /// también copiamos las líneas del pedido
+                        /// también copiamos las líneas del servicio
                         foreach ($this->documento->get_lineas() as $linea)
                         {
                            $newl = clone $linea;
