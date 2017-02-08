@@ -2,7 +2,7 @@
 
 /*
  * This file is part of FacturaSctipts
- * Copyright (C) 2016  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2016-2017  Carlos Garcia Gomez  neorazorx@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -73,6 +73,7 @@ class megacopiador extends fs_controller
                   $presu->fecha = $this->today();
                   $presu->hora = $this->hour();
                   $presu->status = 0;
+                  
                   if( $presu->save() )
                   {
                      /// también copiamos las líneas del presupuesto
@@ -114,7 +115,7 @@ class megacopiador extends fs_controller
                   $albaran->idalbaran = NULL;
                   $albaran->fecha = $this->today();
                   $albaran->hora = $this->hour();
-                  $albaran->observaciones = $this->observaciones;
+                  
                   if( $albaran->save() )
                   {
                      /// también copiamos las líneas del albarán
@@ -157,7 +158,7 @@ class megacopiador extends fs_controller
                   $factura->idfactura = NULL;
                   $factura->fecha = $this->today();
                   $factura->hora = $this->hour();
-                  $factura->observaciones = $this->observaciones;
+                  
                   if( $factura->save() )
                   {
                      /// también copiamos las líneas de la factura
@@ -198,6 +199,7 @@ class megacopiador extends fs_controller
                   $pedido->idpedido = NULL;
                   $pedido->fecha = $this->today();
                   $pedido->hora = $this->hour();
+                  
                   if( $pedido->save() )
                   {
                      /// también copiamos las líneas del pedido

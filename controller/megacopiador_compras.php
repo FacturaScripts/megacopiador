@@ -71,6 +71,7 @@ class megacopiador_compras extends fs_controller
                   $pedido->idpedido = NULL;
                   $pedido->fecha = $this->today();
                   $pedido->hora = $this->hour();
+                  
                   if( $pedido->save() )
                   {
                      /// también copiamos las líneas del pedido
@@ -111,6 +112,7 @@ class megacopiador_compras extends fs_controller
                   $factura->idfactura = NULL;
                   $factura->fecha = $this->today();
                   $factura->hora = $this->hour();
+                  
                   if( $factura->save() )
                   {
                      /// también copiamos las líneas del pedido
@@ -150,6 +152,7 @@ class megacopiador_compras extends fs_controller
                   $albaran->idalbaran = NULL;
                   $albaran->fecha = $this->today();
                   $albaran->hora = $this->hour();
+                  
                   if( $albaran->save() )
                   {
                      /// también copiamos las líneas del pedido
