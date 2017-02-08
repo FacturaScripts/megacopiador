@@ -31,13 +31,18 @@
    <div class="container-fluid">
       <div class="row">
          <div class="col-sm-12">
+            <a href="{$fsc->documento->url()}" class="btn btn-sm btn-default">
+               <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>&nbsp; Volver
+            </a>
             <div class="page-header">
                <h1>
-                  <a href="{$fsc->documento->url()}" class="btn btn-xs btn-default">
-                     <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                  </a>
+                  <span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>
                   Copiar <small>{$fsc->documento->codigo}</small>
                </h1>
+               <p class="help-block">
+                  Usa este formulario y pulsa el botón <b>copiar</b> para hacer una copia
+                  de este <b>{$fsc->tipo2}</b>. Si lo deseas puedes cambiar de cliente, almacén o serie.
+               </p>
             </div>
          </div>
       </div>
