@@ -1,65 +1,146 @@
 {include="header"}
 
 {if="$fsc->documento"}
-<div class="container-fluid">
-   <div class="row">
-      <div class="col-sm-12">
-         <div class="page-header">
-            <h1>
-               <a href="{$fsc->documento->url()}" class="btn btn-xs btn-default">
-                  <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-               </a>
-               Copiar <small>{$fsc->documento->codigo}</small>
-            </h1>
+<script type="text/javascript">
+   $(document).ready(function () {
+      $("#ac_cliente").autocomplete({
+         serviceUrl: '{$fsc->url()}',
+         paramName: 'buscar_cliente',
+         onSelect: function (suggestion) {
+            if (suggestion)
+            {
+               if (document.f_copiar_documento.codcliente.value != suggestion.data && suggestion.data != '')
+               {
+                  document.f_copiar_documento.codcliente.value = suggestion.data;
+               }
+            }
+         }
+      });
+   });
+   function clean_cliente()
+   {
+      document.f_copiar_documento.ac_cliente.value = '';
+      document.f_copiar_documento.codcliente.value = '';
+      document.f_copiar_documento.ac_cliente.focus();
+   }
+</script>
+
+<form name="f_copiar_documento" action="{$fsc->url()}" method="POST" class="form">
+   <input type="hidden" name="codcliente" value="{$fsc->documento->codcliente}"/>
+   <input type="hidden" name="copiar" value="TRUE">
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="page-header">
+               <h1>
+                  <a href="{$fsc->documento->url()}" class="btn btn-xs btn-default">
+                     <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                  </a>
+                  Copiar <small>{$fsc->documento->codigo}</small>
+               </h1>
+            </div>
          </div>
       </div>
-   </div>
-   <div class="row">
-      <div class="col-sm-4">
-         Cliente: {$fsc->documento->nombrecliente}
-      </div>
-      <div class="col-sm-4">
-         Fecha: {$fsc->documento->fecha}
-      </div>
-      <div class="col-sm-4">
-         Hora: {$fsc->documento->hora}
-      </div>
-   </div>
-   <div class="row">
-      <div class="col-sm-12">
-         <br/>
-         <div class="table-responsive">
-            <table class="table table-hover">
-               <thead>
-                  <tr>
-                     <th>Artículo</th>
-                     <th class="text-right">Cantidad</th>
-                     <th class="text-right">Precio</th>
-                     <th class="text-right">Descuento</th>
-                     <th class="text-right">Importe</th>
-                  </tr>
-               </thead>
-               {loop="$fsc->documento->get_lineas()"}
-               <tr>
-                  <td>{$value->referencia} {$value->descripcion}</td>
-                  <td class="text-right">{$value->cantidad}</td>
-                  <td class="text-right">{$fsc->show_precio($value->pvpunitario)}</td>
-                  <td class="text-right">{$fsc->show_numero($value->dtopor)} %</td>
-                  <td class="text-right">{$fsc->show_precio($value->pvptotal)}</td>
-               </tr>
+      <div class="row">
+         <div class="col-md-3">
+            <div class="form-group">
+               Cliente:
+               <div class="input-group">
+                  <input class="form-control" type="text" name="ac_cliente" value="{$fsc->documento->nombrecliente}" id="ac_cliente" autocomplete="off" required=""/>
+                  <span class="input-group-btn">
+                     <button class="btn btn-default" type="button" onclick="clean_cliente()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                     </button>
+                  </span>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-3">
+            <div class="form-group">
+               <span>{#FS_NUMERO2#}:</span>
+               <input class="form-control" type="text" name="numero2" value="{$fsc->documento->numero2}"/>
+            </div>
+         </div>
+         <div class="col-md-2">
+            <div class="form-group">
+               Fecha:
+               <input class="form-control datepicker" type="text" name="fecha" value="{$fsc->documento->fecha}" autocomplete="off" required=""/>
+            </div>
+         </div>
+         <div class="col-md-2">
+            <div class="form-group">
+               <a href="{$fsc->almacen->url()}">Almacén</a>:
+               <select name="codalmacen" class="form-control">
+                  {loop="$fsc->almacen->all()"}
+                  {if="$value->codalmacen==$fsc->documento->codalmacen"}
+                  <option value="{$value->codalmacen}" selected="">{$value->nombre}</option>
+                  {else}
+                  <option value="{$value->codalmacen}">{$value->nombre}</option>
+                  {/if}
+                  {/loop}
+               </select>
+            </div>
+         </div>
+         <div class="col-md-2">
+            <div class="form-group">
+               <a href="{$fsc->serie->url()}" class="text-capitalize">{#FS_SERIE#}</a>:
+               <select class="form-control" name="codserie">
+                  {loop="$fsc->serie->all()"}
+                  {if="$value->codserie==$fsc->documento->codserie"}
+                  <option value="{$value->codserie}" selected="">{$value->descripcion}</option>
+                  {else}
+                  <option value="{$value->codserie}">{$value->descripcion}</option>
+                  {/if}
                {/loop}
-            </table>
+               </select>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12">
+            <br/>
+            <div class="table-responsive">
+               <table class="table table-hover">
+                  <thead>
+                     <tr>
+                        <th>Artículo</th>
+                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">Precio</th>
+                        <th class="text-right">Descuento</th>
+                        <th class="text-right">Importe</th>
+                     </tr>
+                  </thead>
+                  {loop="$fsc->documento->get_lineas()"}
+                  <tr>
+                     <td>{$value->referencia} {$value->descripcion}</td>
+                     <td class="text-right">{$value->cantidad}</td>
+                     <td class="text-right">{$fsc->show_precio($value->pvpunitario)}</td>
+                     <td class="text-right">{$fsc->show_numero($value->dtopor)} %</td>
+                     <td class="text-right">{$fsc->show_precio($value->pvptotal)}</td>
+                  </tr>
+                  {/loop}
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="form-group">
+               Observaciones:
+               <textarea class="form-control" name="observaciones" rows="6">{$fsc->documento->observaciones}</textarea>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12 text-right">
+            <button class="btn btn-sm btn-primary" type="submit">
+               <span class="glyphicon glyphicon-scissors"></span>
+               <span class="hidden-xs">&nbsp; Copiar</span>
+            </button>
          </div>
       </div>
    </div>
-   <div class="row">
-      <div class="col-sm-12 text-right">
-         <a href="{$fsc->url()}&copiar=TRUE" class="btn btn-sm btn-primary">
-            <span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>&nbsp; Copiar
-         </a>
-      </div>
-   </div>
-</div>
+</form>
 {else}
 <h1>No se ha encontrado nada.</h1>
 {/if}
