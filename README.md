@@ -1,5 +1,4 @@
-# facturacion_base
-Plugin para FacturaScripts que permite copiar documentos fácilmente: presupuestos, pedidos, albaranes, facturas...
-En desarrollo.
+# megacopiador
+Plugin para FacturaScripts que permite copiar facturas, albaranes, pedidos, presupuestos, servicios y artículos.
 
-https://www.facturascripts.com
+https://www.facturascripts.com/plugin/megacopiador
