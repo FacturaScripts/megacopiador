@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of FacturaSctipts
+ * This file is part of megacopiador
  * Copyright (C) 2016-2017  Carlos Garcia Gomez  neorazorx@gmail.com
  * Copyright (C) 2016-2017  Luis Miguel Pérez Romero luismipr@gmail.com
  *
@@ -40,9 +40,10 @@ class megacopiador extends fs_controller
    public $cliente;
    public $documento;
    public $ejercicio;
+   public $serie;
    public $tipo;
    public $tipo2;
-   public $serie;
+   public $url_recarga;
    
    public function __construct()
    {
@@ -57,9 +58,10 @@ class megacopiador extends fs_controller
       $this->cliente = new cliente();
       $this->documento = FALSE;
       $this->ejercicio = new ejercicio();
+      $this->serie = new serie();
       $this->tipo = FALSE;
       $this->tipo2 = FALSE;
-      $this->serie = new serie();
+      $this->url_recarga = FALSE;
       
       if( isset($_REQUEST['buscar_cliente']) )
       {
@@ -100,23 +102,7 @@ class megacopiador extends fs_controller
       }
       else if( isset($_REQUEST['articulo']) )
       {
-         $articulo = new articulo();
-         $artori = $articulo->get($_REQUEST['ref']);
-
-         if($artori)
-         {
-            $articulo = clone $artori;
-            $articulo->referencia = $articulo->get_new_referencia();
-
-            if( $articulo->save() )
-            {
-               header('Location: ' . $articulo->url());
-            }
-            else
-            {
-               $this->new_error_msg('Error al copiar el articulo.');
-            }
-         }
+         $this->copiar_articulo();
       }
    }
    
@@ -215,6 +201,29 @@ class megacopiador extends fs_controller
       
       header('Content-Type: application/json');
       echo json_encode(array('query' => $_REQUEST['buscar_cliente'], 'suggestions' => $json));
+   }
+   
+   private function copiar_articulo()
+   {
+      $this->template = 'megacopiador_articulo';
+      $art0 = new articulo();
+      
+      $artori = $art0->get($_REQUEST['ref']);
+      if($artori)
+      {
+         $articulo = clone $artori;
+         $articulo->referencia = $articulo->get_new_referencia();
+         $articulo->stockfis = 0;
+         
+         if( $articulo->save() )
+         {
+            $this->url_recarga = $articulo->url();
+         }
+         else
+         {
+            $this->new_error_msg('Error al copiar el articulo.');
+         }
+      }
    }
    
    private function copiar_documento()

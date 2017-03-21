@@ -1,0 +1,27 @@
+{include="header"}
+
+{if="$fsc->url_recarga"}
+<script type="text/javascript">
+   function recargar()
+   {
+      window.location.href = '{$fsc->url_recarga}';
+   }
+   $(document).ready(function() {
+      setTimeout(recargar, 2000);
+   });
+</script>
+{/if}
+
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="page-header">
+            <h1>
+               Copiando... <i class="fa fa-refresh fa-spin"></i>
+            </h1>
+         </div>
+      </div>
+   </div>
+</div>
+
+{include="footer"}
