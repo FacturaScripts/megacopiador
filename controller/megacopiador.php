@@ -368,7 +368,7 @@ class megacopiador extends fs_controller
             $albaran->observaciones = $_REQUEST['observaciones'];
             
             /// necesitamos el ejercico correcto
-            $ejercicio = $this->ejercicio->get_by_fecha($albaran->codejercicio);
+            $ejercicio = $this->ejercicio->get_by_fecha($albaran->fecha);
             if($ejercicio)
             {
                $albaran->codejercicio = $ejercicio->codejercicio;
@@ -455,7 +455,7 @@ class megacopiador extends fs_controller
             $pedido->observaciones = $_REQUEST['observaciones'];
             
             /// necesitamos el ejercico correcto
-            $ejercicio = $this->ejercicio->get_by_fecha($pedido->codejercicio);
+            $ejercicio = $this->ejercicio->get_by_fecha($pedido->fecha);
             if($ejercicio)
             {
                $pedido->codejercicio = $ejercicio->codejercicio;
