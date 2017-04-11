@@ -632,6 +632,7 @@ class megacopiador extends fs_controller
             $servicio->codalmacen = $this->almacen->codalmacen;
             $servicio->codagente = $this->user->codagente;
             $servicio->observaciones = $_REQUEST['observaciones'];
+            $servicio->numdocs = 0;
             
             /// necesitamos el ejercico correcto
             $ejercicio = $this->ejercicio->get_by_fecha($servicio->fecha);

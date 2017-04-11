@@ -242,7 +242,9 @@ class megacopiador_compras extends fs_controller
              */
             $pedido = clone $this->documento;
             $pedido->idpresupuesto = NULL;
+            $pedido->idalbaran = NULL;
             $pedido->idpedido = NULL;
+            $pedido->editable = TRUE;
             $pedido->idoriginal = NULL;
             $pedido->fecha = $this->today();
             $pedido->hora = $this->hour();
