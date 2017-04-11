@@ -601,11 +601,20 @@ class megacopiador extends fs_controller
       $servicio = new servicio_cliente();
       $this->documento = $servicio->get($_REQUEST['id']);
       $this->tipo = $this->tipo2 = 'servicio';
-      
+
       if($this->documento)
       {
-         if( isset($_REQUEST['copiar']) )
+         if(isset($_REQUEST['copiar']))
          {
+            /// cargamos la configuración de servicios
+            $fsvar = new fs_var();
+            $opciones_servicios = $fsvar->array_get(
+                    array(
+                'servicios_diasfin' => 10,
+                    ), FALSE
+            );
+
+
             /**
              * Si nos llega la variable copiar es que han pulsado el botón
              * de copiar, así que copiamos el servicio.
@@ -615,7 +624,8 @@ class megacopiador extends fs_controller
             $servicio->idalbaran = NULL;
             $servicio->idestado = NULL;
             $servicio->fecha = $_REQUEST['fecha'];
-            $servicio->fechainicio = $_REQUEST['fecha'];
+            $servicio->fechainicio = date('d-m-Y H:i:s', strtotime($_REQUEST['fecha']));
+            $servicio->fechafin = date('d-m-Y H:i:s', strtotime($servicio->fechainicio. ' + '.$opciones_servicios['servicios_diasfin'].' days'));
             $servicio->femail = NULL;
             $servicio->numero2 = $_REQUEST['numero2'];
             $servicio->codserie = $this->serie->codserie;
