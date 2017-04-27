@@ -128,7 +128,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_presupuesto';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<span class="hidden-xs">&nbsp; Copiar</span>';
       $fsext->params = '&presu=TRUE';
       $fsext->save();
 
@@ -139,7 +140,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_pedido';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<span class="hidden-xs">&nbsp; Copiar</span>';
       $fsext->params = '&pedido=TRUE';
       $fsext->save();
 
@@ -150,7 +152,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_albaran';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<spanclass="hidden-xs" >&nbsp; Copiar</span>';
       $fsext->params = '&albaran=TRUE';
       $fsext->save();
 
@@ -161,7 +164,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_factura';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<span class="hidden-xs">&nbsp; Copiar</span>';
       $fsext->params = '&factura=TRUE';
       $fsext->save();
 
@@ -172,7 +176,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_articulo';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<span class="hidden-xs">&nbsp; Copiar</span>';
       $fsext->params = '&articulo=TRUE';
       $fsext->save();
       
@@ -183,7 +188,8 @@ class megacopiador extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'ventas_servicio';
       $fsext->type = 'button';
-      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span><span>&nbsp; Copiar</span>';
+      $fsext->text = '<span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>'
+              . '<span class="hidden-xs">&nbsp; Copiar</span>';
       $fsext->params = '&servicio=TRUE';
       $fsext->save();
    }
