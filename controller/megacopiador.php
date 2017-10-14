@@ -344,7 +344,7 @@ class megacopiador extends fs_controller
       }
    }
    
-   private function copiar_albaran()
+   private function copiar_albaran() 
    {
       $albaran = new albaran_cliente();
       $this->documento = $albaran->get($_REQUEST['id']);
@@ -628,7 +628,7 @@ class megacopiador extends fs_controller
             $servicio = clone $this->documento;
             $servicio->idservicio = NULL;
             $servicio->idalbaran = NULL;
-            $servicio->idestado = NULL;
+            $servicio->idestado = 1;
             $servicio->fecha = $_REQUEST['fecha'];
             $servicio->fechainicio = date('d-m-Y H:i:s', strtotime($_REQUEST['fecha']));
             $servicio->fechafin = date('d-m-Y H:i:s', strtotime($servicio->fechainicio. ' + '.$opciones_servicios['servicios_diasfin'].' days'));
@@ -680,7 +680,7 @@ class megacopiador extends fs_controller
                      $newl->save();
                   }
                   
-                  $this->new_message('<a href="' . $servicio->url() . '">Documento</a> de ' . FS_SERVICIO . ' copiado correctamente.');
+                  $this->new_message( 'El . ' . FS_SERVICIO . '<a href="' . $servicio->url() . '"> ' . $servicio->codigo . '</a> se ha generado correctamente.');
                }
                else
                {
