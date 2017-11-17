@@ -540,13 +540,21 @@ class megacopiador extends fs_controller
             $presu->numero2 = $_REQUEST['numero2'];
             $presu->fecha = $_REQUEST['fecha'];
             $presu->femail = NULL;
-            $presu->finoferta = date('d-m-Y', strtotime($_REQUEST['fecha'].' +15 days'));
+            
+            //fecha de fin de oferta
+            $fsvar = new fs_var();
+            $dias = $fsvar->simple_get('presu_validez');
+            if ($dias) {
+               $presu->finoferta = date('d-m-Y', strtotime($_REQUEST['fecha'] . ' +' . intval($dias) . ' days'));
+            } else
+               $presu->finoferta = date('d-m-Y', strtotime($_REQUEST['fecha'] . ' +30 days'));
+            
             $presu->status = 0;
             $presu->codserie = $this->serie->codserie;
             $presu->codalmacen = $this->almacen->codalmacen;
             $presu->codagente = $this->user->codagente;
             $presu->observaciones = $_REQUEST['observaciones'];
-            
+
             /// necesitamos el ejercico correcto
             $ejercicio = $this->ejercicio->get_by_fecha($presu->fecha);
             if($ejercicio)
